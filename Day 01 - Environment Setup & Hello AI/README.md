@@ -1,6 +1,6 @@
-# 📅 Day 01 - Environment Setup & Hello AI
+# Day 01 - Environment Setup & Hello AI
 
-## 🎯 Objective
+## Objective
 
 Welcome to Day 01 of the 21-Day AI Assistant Learning Journey.
 
