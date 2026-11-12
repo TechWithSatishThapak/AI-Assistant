@@ -155,6 +155,8 @@ source .venv/bin/activate
 
 ```bash
 pip install openai python-dotenv
+
+pip freeze > requirements.txt
 ```
 
 ---
