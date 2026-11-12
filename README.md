@@ -1,2 +1,2 @@
 # AI-Assistant
-images/Project Structure.png
+![project-structure](assets/project-structure.png)
