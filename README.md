@@ -1,2 +1,2 @@
 # AI-Assistant
-![alt text](image.png)
+images/Project Structure.png
