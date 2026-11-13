@@ -119,7 +119,9 @@ ollama run qwen3:1.7b
 AI-Assistant-Learning/
 │
 ├── Day_01/
-│
+|__ hello_ai.py
+|__ 
+|__ .env
 └── README.md
 ```
 
