@@ -47,10 +47,12 @@ def main():
     system_prompt = {
         "role": "system",
         "content": (
-            "Reply ONLY in English. Never use Chinese characters. "
-            "Give clear, well-structured answers using bullet points. /no_think"
+            "You are a helpful, clear AI assistant. "
+            "Always respond strictly in English. "
+            "Format explanations cleanly using short paragraphs and bullet points."
         ),
     }
+
     messages = [system_prompt]
 
     while True:
