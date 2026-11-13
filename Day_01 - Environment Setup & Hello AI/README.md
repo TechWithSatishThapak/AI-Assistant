@@ -120,7 +120,7 @@ AI-Assistant-Learning/
 │
 ├── Day_01/
 |__ hello_ai.py
-|__ 
+|__ assistant.py
 |__ .env
 └── README.md
 ```
