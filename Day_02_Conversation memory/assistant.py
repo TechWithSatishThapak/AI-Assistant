@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -33,16 +34,31 @@ def clear_status():
     sys.stdout.flush()
 
 
+def clean_reply(text: str) -> str:
+    """Removes any leftover Qwen <think> blocks and extra blank lines."""
+    text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)
+    return text.strip()
+
+
 def main():
     print_banner()
 
-    # Optional: Give the AI a starting personality or role
-    messages = [
-        {"role": "system", "content": "You are a helpful and concise AI assistant."}
-    ]
+    # Strict prompt tailored for qwen3:1.7b
+    system_prompt = {
+        "role": "system",
+        "content": (
+            "Reply ONLY in English. Never use Chinese characters. "
+            "Give clear, well-structured answers using bullet points. /no_think"
+        ),
+    }
+    messages = [system_prompt]
 
     while True:
-        user_input = input("\nYou : ").strip()
+        try:
+            user_input = input("\nYou : ").strip()
+        except (KeyboardInterrupt, EOFError):
+            print("\n\nAI  : Goodbye! Have a great day.\n")
+            break
 
         # 1. Ignore accidental empty presses
         if not user_input:
@@ -55,7 +71,7 @@ def main():
 
         # 3. Allow clearing conversation memory mid-chat
         if user_input.lower() == "clear":
-            messages = [messages[0]]
+            messages = [system_prompt]
             print("\nAI  : Memory cleared! Starting a fresh conversation.")
             print("-" * 45)
             continue
@@ -69,20 +85,23 @@ def main():
             response = client.chat.completions.create(
                 model=MODEL_NAME,
                 messages=messages,
+                temperature=0.2,        # Stops random language switching
+                top_p=0.85,             # Keeps word choices focused
+                frequency_penalty=0.2,  # Prevents repetitive phrasing
             )
 
-            ai_reply = response.choices[0].message.content
+            raw_reply = response.choices[0].message.content
+            ai_reply = clean_reply(raw_reply)
             clear_status()
 
             print(f"AI  : {ai_reply}")
             print("-" * 45)
 
-            # Save the AI's reply to history
+            # Save the cleaned reply to history
             messages.append({"role": "assistant", "content": ai_reply})
 
         except Exception as error:
             clear_status()
-            # Remove the failed user message so history stays clean
             messages.pop()
             print(f"AI  : Sorry, an error occurred ({error})")
 
